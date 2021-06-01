@@ -55,6 +55,11 @@ def threaded_client(conn, player):
                 print("Received: ",data)
                 print("Sending: ",reply)
                 conn.send(str.encode(str(reply)))
+            elif data == "1":
+                pos[1] = (0,200)
+                pos[0] = (0,300)
+                readystat[0] = False
+                readystat[1] = False
             else:
                 pos[player] = read_pos(data)
                 

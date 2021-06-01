@@ -18,6 +18,10 @@ BG_wait = pygame.transform.scale(pygame.image.load(os.path.join("assets", "gameB
 bird1 = pygame.transform.scale(pygame.image.load(os.path.join("assets", "b1.png")), (100,80))
 bird2 = pygame.transform.scale(pygame.image.load(os.path.join("assets", "b3.png")), (100,80))
 
+#win lose BG
+u_win =  pygame.transform.scale(pygame.image.load(os.path.join("assets", "win.jpg")), (width, height))
+u_lose = pygame.transform.scale(pygame.image.load(os.path.join("assets", "lose.jpg")), (width, height))
+
 class Player():
     def __init__(self,x,y,width,height,image):
         self.x = x
@@ -31,7 +35,6 @@ class Player():
            
     def draw(self,win):
         win.blit(self.image, (self.x, self.y))
-        #pygame.draw.rect(win, self.color , self.rect)
         
     def move(self):
         self.x += self.vel
@@ -85,23 +88,16 @@ def main(boo1,boo2):
         p2.x = p2Pos[0]
         p2.y = p2Pos[1]
         p2.update()
-       
-        u_win =  pygame.transform.scale(pygame.image.load(os.path.join("assets", "win.jpg")), (width, height))
-        u_lose = pygame.transform.scale(pygame.image.load(os.path.join("assets", "lose.jpg")), (width, height))
 
         if p.x + p.get_width() > width: 
             win.blit(u_win, (0,0))
             pygame.display.update()
             pygame.time.delay(2000)
-            p2.ready = False
-            p.ready = False
             run = False            
         elif p2.x + p2.get_width() > width:
             win.blit(u_lose, (0,0))
             pygame.display.update()
             pygame.time.delay(2000)
-            p2.ready = False
-            p.ready = False
             run = False  
 
         for event in pygame.event.get():
@@ -113,6 +109,8 @@ def main(boo1,boo2):
                 if mouse_presses[0]: 
                     p.move()
         redrawWindow(win ,p , p2)
+        
+    n.reset(1)
     menu(True)
         
 def menu(boo):

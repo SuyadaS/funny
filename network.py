@@ -39,3 +39,9 @@ class Network:
         else:
             pass
 
+    def reset(self,data):
+        try:
+            self.client.send(str.encode(str(data)))
+        except socket.error as e:
+            print(e)
+
