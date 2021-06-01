@@ -7,6 +7,7 @@ port = 1612
 idcount = 0
 pos = [(0,200),(0,300)]
 readystat = [False,False]
+finish = 0
 
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -68,7 +69,6 @@ def threaded_client(conn, player):
                         
                     print("Received: ",data)
                     print("Sending: ",reply)
-                
                 conn.send(str.encode(make_pos(reply)))   
         except :
             break
