@@ -1,14 +1,18 @@
 import pygame
+from pynput import mouse
 from network import Network
 pygame.font.init()
 import os
 import threading
+import time
 
 width = 500
 height = 500
 n = Network()
 win = pygame.display.set_mode((width,height))
 pygame.display.set_caption("Game")
+click_count = 0
+flag = 0
 
 # Background
 BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "BG.jpg")), (width, height))
@@ -70,16 +74,37 @@ def redrawWindow(win,p,p2):
         p2.draw(win)
     pygame.display.update()
 
-def countdown():
-    pass
-    
+
+def countclick(p):
+    global flag
+    global click_count
+    clock = pygame.time.Clock()
+
+    while True:
+        clock.tick(60)
+        if flag ==1:
+            print("ending the thread")
+            break
+        else:
+            click_count = p.x/3
+            print (click_count)
+            
+        
+        
 def main(boo1,boo2):
+    global click_count
+    global flag
+    t = time.time()
     run = boo1
     startPos = read_pos(n.getPos())
     p = Player(startPos[0],startPos[1],100,100,bird1)
     p2 = Player(0,0,100,100,bird2)
     p.ready = boo2
     clock = pygame.time.Clock()
+
+    tcount = threading.Thread(target=countclick, args=(p,))
+    tcount.setDaemon(True)
+    tcount.start()
 
     while run:
         clock.tick(60)
@@ -89,13 +114,25 @@ def main(boo1,boo2):
         p2.y = p2Pos[1]
         p2.update()
 
-        if p.x + p.get_width() > width: 
+        if p.x + p.get_width() > width:
+            flag = 1
+            font = pygame.font.SysFont("comicsans", 30)
+            text = font.render("You've clicked"+ str(click_count) + "times in" + str(time.time() - t), 1, (255,0,0)) 
             win.blit(u_win, (0,0))
+            pygame.display.update()
+            pygame.time.delay(2000)
+            win.blit(text, (width/100 - text.get_width()/100, height/100 - text.get_height()/100))
             pygame.display.update()
             pygame.time.delay(2000)
             run = False            
         elif p2.x + p2.get_width() > width:
+            flag = 1
+            font = pygame.font.SysFont("comicsans", 30)
+            text = font.render("You've clicked"+ str(click_count) + "times in" + str(time.time() - t), 1, (255,0,0)) 
             win.blit(u_lose, (0,0))
+            pygame.display.update()
+            pygame.time.delay(2000)
+            win.blit(text, (width/100 - text.get_width()/100, height/100 - text.get_height()/100))
             pygame.display.update()
             pygame.time.delay(2000)
             run = False  
@@ -109,7 +146,10 @@ def main(boo1,boo2):
                 if mouse_presses[0]: 
                     p.move()
         redrawWindow(win ,p , p2)
-        
+    tcount.join()
+    print("thread end")
+    click_count = 0
+    flag = 0
     n.reset(1)
     menu(True)
         
