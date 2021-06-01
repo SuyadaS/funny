@@ -2,7 +2,7 @@
 import socket
 import threading
 
-server = "192.168.0.104"
+server = socket.gethostbyname(socket.gethostname())
 port = 1612
 idcount = 0
 pos = [(0,200),(0,300)]

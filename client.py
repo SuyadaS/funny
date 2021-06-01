@@ -74,7 +74,6 @@ def redrawWindow(win,p,p2):
         p2.draw(win)
     pygame.display.update()
 
-
 def countclick(p):
     global flag
     global click_count
@@ -89,7 +88,6 @@ def countclick(p):
             click_count = p.x/3
             print (click_count)
             
-        
         
 def main(boo1,boo2):
     global click_count
